@@ -1,6 +1,6 @@
 import re
 import nltk
-# nltk.download()
+# nltk.download() # uncomment to download stopword and tokenize libraries
 from nltk import word_tokenize
 from nltk.corpus import stopwords
 
