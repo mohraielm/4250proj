@@ -8,6 +8,12 @@ test_data = [
     "Nonlinear seismic response of flexible buildings and large-span bridges Liquid-Structure Interaction Seismic response of steel frame buildings to near-source ground motions Soil-Structure Interaction Effects on seismic response of structures"
 ]
 
+test_data2 = [
+    "Tropical fish include fish found in tropical environments around the world, including both freshwater and salt water species.",
+    "Fishkeepers often use the term tropical fish to refer only those requiring fresh water, with saltwater tropical fish referred to as marine fish.",
+    "Tropical fish are popular aquarium fish, due to their often bright coloration.",
+    "In freshwater fish, this coloration typically derives from iridescence, while salt water fish are generally pigmented."
+]
 
 # pass in an array of strings to index
-index(test_data)
+index(test_data2)
