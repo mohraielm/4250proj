@@ -1,6 +1,6 @@
 import re
 import nltk
-nltk.download()
+# nltk.download()
 from nltk import word_tokenize
 from nltk.corpus import stopwords
 
@@ -11,20 +11,20 @@ class StemTokenizer:
         self.stemmer = PorterStemmer()
         self.stemmed_stop_words = [self.stemmer.stem(word) for word in stopwords.words('english')]
 
-    def tokenize_with_positions(self, doc):
+    def tokenize(self, doc):
         text = remove_punctuation_processor(doc)
         tokens = word_tokenize(text)  # Tokenize the text
-        stemmed_tokens_with_positions = []
+        stemmed_tokens = []
         
         # Iterate through tokens and track token index
-        for token_index, token in enumerate(tokens):
+        for token in tokens:
             stemmed_token = self.stemmer.stem(token)  # Stem the token
-            stemmed_tokens_with_positions.append((stemmed_token, token_index))  # Append tuple
+            stemmed_tokens.append(stemmed_token)
 
-        return stemmed_tokens_with_positions
+        return stemmed_tokens
     
     def __call__(self, doc):
-        return [token for token, _ in self.tokenize_with_positions(doc)]
+        return self.tokenize(doc)
 
 # Remove punctuation
 def remove_punctuation_processor(text):

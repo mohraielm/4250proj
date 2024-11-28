@@ -8,11 +8,6 @@ def index(documents: Dict[str, str]):
     tokenizer = StemTokenizer()
     texts = list(documents.values())
 
-    # get positions of terms from tokenizer
-    term_positions = []
-    for text in texts:
-        term_positions.append(tokenizer.tokenize_with_positions(text))
-
     # instantiate the vectorizer object
     vectorizer = TfidfVectorizer(
         analyzer= 'word',
@@ -83,7 +78,6 @@ def index(documents: Dict[str, str]):
 
                 inverted_index[term].append({
                     "id": url,
-                    "positions": [pos for t, pos in term_positions[doc_index] if t == term],  # Get term positions
                     "tfidf": tfidf
                 })
 
