@@ -1,4 +1,3 @@
-from typing import Literal
 from sklearn.feature_extraction.text import TfidfVectorizer
 import pandas as pd
 from tokenizers import StemTokenizer
@@ -7,26 +6,26 @@ from database import *
 def index(texts: list[str]):
     tokenizer = StemTokenizer()
 
-    # Preprocess to extract positions
+    # get positions of terms from tokenizer
     term_positions = []
     for doc in texts:
         term_positions.append(tokenizer.tokenize_with_positions(doc))
 
     # instantiate the vectorizer object
-    vectorizer  = TfidfVectorizer(
+    vectorizer = TfidfVectorizer(
         analyzer= 'word',
         strip_accents="unicode",
         stop_words=tokenizer.stemmed_stop_words,
         tokenizer=tokenizer
     )
 
-    # tokenize and build vocab
+    # build vocabulary
     vectorizer.fit(texts)
 
     # encode documents into vectors
     sparse_matrix = vectorizer.transform(texts)
 
-    # retrieve the terms found in the corpora
+    # retrieve the terms after tokenization, stopword removal, and stemming
     terms = vectorizer.get_feature_names_out()
 
     # showing the term matrix in an organized way by using a data frame
@@ -50,11 +49,12 @@ def index(texts: list[str]):
                 for doc_id in doc_indices
             ]
 
-    # Convert to DataFrame so it prints nicely in console
+    # Convert to DataFrame so it prints nicely in console for debugging
     inverted_index_df = pd.DataFrame([
         {"term": term, "documents": info}
         for term, info in inverted_index.items()
     ])
+    print("Inverted Index\n")
     print(inverted_index_df)
 
     # Store each term and its info as its own document in the index collection
