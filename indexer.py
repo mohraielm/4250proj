@@ -5,6 +5,15 @@ from tokenizers import StemTokenizer
 from database import *
 
 def index(documents: Dict[str, str]):
+    '''
+    Creates/updates three collections in the database:\n
+    vocabualary: stores all terms and their indices,\n
+    index: stores a vector for each document id'd by their url,\n
+    invertedIndex: stores every document and tfidf value that has that term in its text
+
+    Args:
+        documents: a map representation of document url's and their text to index.\nExample: { 'https://testurl.com/relative-path': 'Text of the document goes here' }
+    '''
     tokenizer = StemTokenizer()
     texts = list(documents.values())
 
