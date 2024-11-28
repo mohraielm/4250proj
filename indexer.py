@@ -25,6 +25,24 @@ def index(texts: list[str]):
     # encode documents into vectors
     sparse_matrix = vectorizer.transform(texts)
 
+    # store vector for each document in index collection
+    # iterate through each row of the matrix
+    for doc_id in range(sparse_matrix.shape[0]):
+        sparse_vector = sparse_matrix[doc_id]
+
+        # convert sparse_vector into a dictionary so we can directly insert into a mongodb document
+        indices = [str(index) for index in sparse_vector.indices]   # converts np.int32 indices into strings to be used as mongoDB fields
+        values = sparse_vector.data
+        sparse_vector_to_dict = dict(zip(indices, values))
+
+        # store sparse vector and doc id in mongodb index collection
+        index_collection.update_one(
+            { "_id": doc_id },
+            { "$set": { "sparseVector": sparse_vector_to_dict } },
+            upsert=True
+        )
+
+
     # retrieve the terms after tokenization, stopword removal, and stemming
     terms = vectorizer.get_feature_names_out()
 
@@ -59,7 +77,7 @@ def index(texts: list[str]):
 
     # Store each term and its info as its own document in the index collection
     for term, info in inverted_index.items():
-        index_collection.update_one(
+        inverted_index_collection.update_one(
             { "_id": term },
             {"$set": {"documents": info}},  # Update or insert
             upsert=True  # Create if doesn't exist
