@@ -22,6 +22,13 @@ def index(texts: list[str]):
     # build vocabulary
     vectorizer.fit(texts)
 
+    # store vocabulary in vocabulary collection to reinitialize TfidVectorizer for querying later
+    vocabulary_collection.update_one(
+        { "_id": "vocabulary_doc" },  # manually set _id so that we can overwrite this doc
+        { "$set": { "vocabulary": vectorizer.vocabulary_.copy() } },   # Note: use a copy of the vocabulary list otherwise MongoDB can directly mutate the original vocabulary
+        upsert=True
+    )
+
     # encode documents into vectors
     sparse_matrix = vectorizer.transform(texts)
 
