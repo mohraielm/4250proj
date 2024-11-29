@@ -70,8 +70,6 @@ def index(documents: Dict[str, str]):
 
     inverted_index = {}
 
-    print(tokenizer.term_positions)
-
     # Iterate through every token
     for doc_index, (url, _) in enumerate(documents.items()):
         sparse_vector = sparse_matrix[doc_index]

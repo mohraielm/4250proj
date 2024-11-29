@@ -13,6 +13,14 @@ class StemTokenizer:
         self.term_positions = []
 
     def tokenize(self, doc):
+        '''
+        Hijack tokenization flow so that we can calculate char positions of a token based on the original text
+
+        Args:
+            doc: original text of a document of type string
+        Returns:
+            stemmed_tokens: a list of stemmed tokens based on the original text
+        '''
         text = remove_punctuation_processor(doc)
         tokens = word_tokenize(text)  # Tokenize the text
 
@@ -32,6 +40,13 @@ class StemTokenizer:
         return stemmed_tokens
     
     def getTokenPositions(self, token, doc):
+        '''
+        Calculates a token's char positions based on the original text
+
+        Args:
+            token: token to calculate the char positions for
+            doc: original text of a document of type string
+        '''
         positions = []
         matches = re.finditer(token, doc)
 
@@ -40,6 +55,7 @@ class StemTokenizer:
 
         return positions
     
+    # Function that is called by the TfidVectorizer for every document
     def __call__(self, doc):
         return self.tokenize(doc)
 
