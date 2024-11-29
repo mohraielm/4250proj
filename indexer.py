@@ -21,7 +21,6 @@ def index(documents: Dict[str, str]):
     vectorizer = TfidfVectorizer(
         analyzer= 'word',
         strip_accents="unicode",
-        stop_words=tokenizer.stemmed_stop_words,
         tokenizer=tokenizer
     )
 
@@ -71,6 +70,8 @@ def index(documents: Dict[str, str]):
 
     inverted_index = {}
 
+    print(tokenizer.term_positions)
+
     # Iterate through every token
     for doc_index, (url, _) in enumerate(documents.items()):
         sparse_vector = sparse_matrix[doc_index]
@@ -87,6 +88,7 @@ def index(documents: Dict[str, str]):
 
                 inverted_index[term].append({
                     "id": url,
+                    "positions": [pos for pos in tokenizer.term_positions[doc_index][term]],  # Get term positions
                     "tfidf": tfidf
                 })
 
