@@ -54,7 +54,7 @@ def index(documents: Dict[str, str]):
         sparse_vector_to_dict = dict(zip(indices, values))
 
         # store sparse vector and doc id in mongodb index collection
-        index_collection.update_one(
+        documents_collection.update_one(
             { "_id": url },
             { "$set": { "sparseVector": sparse_vector_to_dict } },
             upsert=True  # Create if doesn't exist

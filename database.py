@@ -8,7 +8,7 @@ try:
     client = MongoClient(host=DB_HOST, port=DB_PORT)
     db = client[DB_NAME]
     vocabulary_collection = db['vocabulary']
-    index_collection = db['index']
+    documents_collection = db['documents']
     inverted_index_collection = db['invertedIndex']
 except:
     print("Database not connected successfully")

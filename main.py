@@ -29,4 +29,4 @@ test_data4 = {
 }
 
 # pass in an array of strings to index
-index(test_data4)
+index(test_data3)
