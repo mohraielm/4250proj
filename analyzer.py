@@ -2,6 +2,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from scipy.sparse import csr_matrix
 from database import *
 import numpy as np
+import pickle
 
 def query(queries: list):
     '''
@@ -14,10 +15,10 @@ def query(queries: list):
         A dictionary with queries as keys and a list of matching documents with cosine similarity scores as values.
     '''
     # Load vocabulary from the database
-    vocabulary_doc = vocabulary_collection.find_one({"_id": "vocabulary_doc"})
-    if not vocabulary_doc:
-        raise ValueError("No vocabulary found in the database.")
-
+ 
+    vectorizer_document = vectorizer_collection.find_one({"_id": "vectorizer_doc"})
+    serialized_vectorizer = vectorizer_document["vectorizer"] 
+    vectorizer: TfidfVectorizer = pickle.loads(serialized_vectorizer)  
 
     # Transform queries into vectors
     query_vectors = vectorizer.transform(queries)
