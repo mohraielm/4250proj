@@ -1,13 +1,15 @@
 from database import *
 from indexer import index
 from analyzer import query
+import math
+
+BOLD = '\033[1m'
+PURPLE = '\033[95m'
+BLUE = '\033[34m'
+RESET = '\033[0m'
 
 def pagination(results: list):
     page = 1
-    BOLD = '\033[1m'
-    PURPLE = '\033[95m'
-    BLUE = '\033[34m'
-    RESET = '\033[0m'
     print(f'{BOLD}{PURPLE}-----{len(results)} Results-----{RESET}')
     while True:
         for i in range(page*5 - 5, page*5):
@@ -17,8 +19,9 @@ def pagination(results: list):
             print(f'{BLUE}{result['url']}{RESET}')
             print(f'...{result['content']}...')
             print()
+        print(f'{BOLD}{PURPLE}Page {page} of {math.ceil(len(results) / 5)}{RESET}')
         
-        print('\nMenu:')
+        print('Menu:')
         print('1. Previous')
         print('2. Next')
         print('3. Return to Main Menu')
@@ -30,13 +33,13 @@ def pagination(results: list):
                 page = 1
         elif choice == "2":
             page += 1
-            if (page*5 - 5 > len(results)):
+            if (page > math.ceil(len(results) / 5)):
                 page -= 1
         elif choice == "3":
             break
 
 while True:
-    print("Menu:")
+    print("\nMenu:")
     print("1. Crawl")
     print("2. Parse")
     print("3. Index")
