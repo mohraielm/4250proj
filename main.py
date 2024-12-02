@@ -9,11 +9,13 @@ BOLD = '\033[1m'
 PURPLE = '\033[95m'
 BLUE = '\033[34m'
 RESET = '\033[0m'
+CLEAR = '\033c'
 
 def pagination(results: list):
     page = 1
-    print(f'{BOLD}{PURPLE}-----{len(results)} Results-----{RESET}')
     while True:
+        print(CLEAR, end='')
+        print(f'{BOLD}{PURPLE}-----{len(results)} Results-----{RESET}')
         for i in range(page*5 - 5, page*5):
             if (i >= len(results)):
                 continue
@@ -41,6 +43,7 @@ def pagination(results: list):
             break
 
 while True:
+    print(CLEAR, end='')
     print("\nMenu:")
     print("1. Crawl")
     print("2. Parse")
