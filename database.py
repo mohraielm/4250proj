@@ -7,10 +7,10 @@ DB_PORT = 27017
 try:
     client = MongoClient(host=DB_HOST, port=DB_PORT)
     db = client[DB_NAME]
-    vocabulary_collection = db['vocabulary']
-    index_collection = db['index']
+    documents_collection = db['documents']
     inverted_index_collection = db['invertedIndex']
     pages = db['pages']
     search_content = db['search_content']
+    vectorizer_collection = db['vectorizer']
 except:
     print("Database not connected successfully")
