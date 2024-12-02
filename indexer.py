@@ -86,6 +86,7 @@ def index(documents: Dict[str, str]):
                 # Add the term to the inverted index
                 inverted_index[term]["docs"].append({
                     "id": url,
+                    "positions": [pos for pos in tokenizer.term_positions[doc_index][term]],  # Get term positions
                     "tfidf": tfidf})
 
     # Print inverted index using a dataframe for console print formatting
