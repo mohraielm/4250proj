@@ -1,5 +1,7 @@
 from database import *
 from indexer import index
+from crawler import crawler
+from parser import parser
 from analyzer import query
 
 while True:
@@ -13,9 +15,13 @@ while True:
     choice = input("Enter your choice: ")
 
     if choice == "1":
-        print("Option 1 selected")
+        crawler('https://www.cpp.edu/engineering/ce/index.shtml')
     elif choice == "2":
-        print("Option 2 selected")
+        # find the target documents in the pages collection
+        targets = pages_collection.find({'isTarget': True})
+
+        # pass in cursor object to parser
+        parser(targets)
     elif choice == "3":
         # get search content to index
         search_content = search_content_collection.find()
