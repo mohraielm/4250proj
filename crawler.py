@@ -12,7 +12,7 @@ def crawler(seed_url: str):
     # initialize set for visited links
     visited = set()
 
-    NUMBER_TARGETS = 10
+    NUMBER_TARGETS = 25
 
     # define re for easier access to expression
     relative_url = r'^\/(?!\/)' 
