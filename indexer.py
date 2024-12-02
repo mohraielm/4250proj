@@ -2,6 +2,7 @@ from typing import Dict
 from sklearn.feature_extraction.text import TfidfVectorizer
 import pandas as pd
 from tokenizers import StemTokenizer
+import pickle
 from database import *
 
 def index(documents: Dict[str, str]):
@@ -31,6 +32,13 @@ def index(documents: Dict[str, str]):
     vocabulary_collection.update_one(
         { "_id": "vocabulary_doc" },  # manually set _id so that we can overwrite this doc
         { "$set": { "vocabulary": vectorizer.vocabulary_.copy() } },   # Note: use a copy of the vocabulary list otherwise MongoDB can directly mutate the original vocabulary
+        upsert=True
+    )
+
+    serialized_vectorizer = pickle.dumps(vectorizer)
+    vectorizer_collection.update_one(
+        { "_id": "vectorizer_doc" },
+        { "$set": { "vectorizer": serialized_vectorizer } },
         upsert=True
     )
 
