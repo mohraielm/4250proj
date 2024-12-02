@@ -2,8 +2,41 @@ from database import *
 from indexer import index
 from analyzer import query
 
+def pagination(results: list):
+    page = 1
+    BOLD = '\033[1m'
+    PURPLE = '\033[95m'
+    BLUE = '\033[34m'
+    RESET = '\033[0m'
+    print(f'{BOLD}{PURPLE}-----{len(results)} Results-----{RESET}')
+    while True:
+        for i in range(page*5 - 5, page*5):
+            if (i >= len(results)):
+                continue
+            result = results[i]
+            print(f'{BLUE}{result['url']}{RESET}')
+            print(f'...{result['content']}...')
+            print()
+        
+        print('\nMenu:')
+        print('1. Previous')
+        print('2. Next')
+        print('3. Return to Main Menu')
+        choice = input("Enter your choice: ")
+
+        if choice == "1":
+            page -= 1
+            if (page < 1):
+                page = 1
+        elif choice == "2":
+            page += 1
+            if (page*5 - 5 > len(results)):
+                page -= 1
+        elif choice == "3":
+            break
+
 while True:
-    print("\nMenu:")
+    print("Menu:")
     print("1. Crawl")
     print("2. Parse")
     print("3. Index")
@@ -28,12 +61,8 @@ while True:
         index(search_content_list) # UNCOMMENT TO USE INDEXER
     elif choice == "4":
         user_query = input("Enter your query: ")
-
-        results = query([user_query])
-
-        # Display results
-        for query, docs in results.items():
-            print(f"Query: {query}")
+        results = query(user_query)
+        pagination(results)
 
     elif choice == "5":
         print("Exiting...")
