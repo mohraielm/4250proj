@@ -21,7 +21,7 @@ cpp_base =  "https://www.cpp.edu/"
 while frontier:
     # get the next URL from the queue
     url = frontier.popleft()
-    # html = urlopen(url)
+    
     try:
         html = urlopen(url)
     except Exception as e:
