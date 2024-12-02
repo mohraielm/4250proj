@@ -18,8 +18,8 @@ def pagination(results: list):
             if (i >= len(results)):
                 continue
             result = results[i]
-            print(f'{BLUE}{result['url']}{RESET}')
-            print(f'...{result['content']}...')
+            print(f'{BLUE}{result["url"]}{RESET}')
+            print(f'...{result["content"]}...')
             print()
         print(f'{BOLD}{PURPLE}Page {page} of {math.ceil(len(results) / 5)}{RESET}')
         
