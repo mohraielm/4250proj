@@ -1,5 +1,7 @@
 from database import *
 from indexer import index
+from crawler import crawler
+from parser import parser
 from analyzer import query
 import math
 
@@ -16,8 +18,8 @@ def pagination(results: list):
             if (i >= len(results)):
                 continue
             result = results[i]
-            print(f'{BLUE}{result['url']}{RESET}')
-            print(f'...{result['content']}...')
+            print(f'{BLUE}{result["url"]}{RESET}')
+            print(f'...{result["content"]}...')
             print()
         print(f'{BOLD}{PURPLE}Page {page} of {math.ceil(len(results) / 5)}{RESET}')
         
@@ -49,9 +51,13 @@ while True:
     choice = input("Enter your choice: ")
 
     if choice == "1":
-        print("Option 1 selected")
+        crawler('https://www.cpp.edu/engineering/ce/index.shtml')
     elif choice == "2":
-        print("Option 2 selected")
+        # find the target documents in the pages collection
+        targets = pages_collection.find({'isTarget': True})
+
+        # pass in cursor object to parser
+        parser(targets)
     elif choice == "3":
         # get search content to index
         search_content = search_content_collection.find()
