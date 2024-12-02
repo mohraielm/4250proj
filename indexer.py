@@ -51,15 +51,6 @@ def index(documents: Dict[str, str]):
         # convert sparse_vector into a dictionary so we can directly insert into a mongodb document
         indices = [str(term_index) for term_index in sparse_vector.indices]   # converts np.int32 indices into strings to be used as mongoDB fields
         values = sparse_vector.data
-        sparse_vector_to_dict = dict(zip(indices, values))
-
-        # store sparse vector and doc id in mongodb index collection
-        documents_collection.update_one(
-            { "_id": url },
-            { "$set": { "sparseVector": sparse_vector_to_dict } },
-            upsert=True  # Create if doesn't exist
-        )
-
     # retrieve the terms after tokenization, stopword removal, and stemming
     terms = vectorizer.get_feature_names_out()
 
