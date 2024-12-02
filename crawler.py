@@ -6,7 +6,7 @@ from database import *
 
 # initialize frontier
 frontier = deque()
-frontier.append('https://www.cpp.edu/engineering/ce/index.shtml')
+frontier.append('https://www.cpp.edu/engineering/ce/faculty.shtml')
 
 # initialize set for visited links
 visited = set()
@@ -28,6 +28,11 @@ while frontier:
         print(e)
     
     data = html.read()
+
+    content_type = html.info().get_content_type()
+
+    if not 'html' in content_type:
+        break
 
     bs = BeautifulSoup(data, 'html.parser')
 

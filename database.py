@@ -11,5 +11,6 @@ try:
     index_collection = db['index']
     inverted_index_collection = db['invertedIndex']
     pages = db['pages']
+    search_content = db['search_content']
 except:
     print("Database not connected successfully")
