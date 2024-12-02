@@ -10,5 +10,6 @@ try:
     vocabulary_collection = db['vocabulary']
     index_collection = db['index']
     inverted_index_collection = db['invertedIndex']
+    pages = db['pages']
 except:
     print("Database not connected successfully")
