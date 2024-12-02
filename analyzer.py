@@ -17,8 +17,8 @@ def query(queries: list):
     # Load vocabulary from the database
  
     vectorizer_document = vectorizer_collection.find_one({"_id": "vectorizer_doc"})
-    serialized_vectorizer = vectorizer_document["vectorizer"] 
-    vectorizer: TfidfVectorizer = pickle.loads(serialized_vectorizer)  
+    serialized_vectorizer = vectorizer_document["vectorizer"]
+    vectorizer: TfidfVectorizer = pickle.loads(serialized_vectorizer)
 
     # Transform queries into vectors
     query_vectors = vectorizer.transform(queries)

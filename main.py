@@ -1,28 +1,43 @@
 from database import *
 from indexer import index
-from analyzer import query 
+from analyzer import query
 
-# crawl
-# from crawler import *     # UNCOMMENT TO USE CRAWLER
-# parse
-# from parser import *      # UNCOMMENT TO USE PARSER
+while True:
+    print("\nMenu:")
+    print("1. Crawl")
+    print("2. Parse")
+    print("3. Index")
+    print("4. Query")
+    print("5. Exit")
 
-# get search content to index
-search_content = search_content_collection.find()
-search_content_list = {}
+    choice = input("Enter your choice: ")
 
-for content in search_content:
-    search_content_list[content['_id']] = content['content']
+    if choice == "1":
+        print("Option 1 selected")
+    elif choice == "2":
+        print("Option 2 selected")
+    elif choice == "3":
+        # get search content to index
+        search_content = search_content_collection.find()
+        search_content_list = {}
 
-# pass in an array of strings to index
-# index(search_content_list) # UNCOMMENT TO USE INDEXER
+        for content in search_content:
+            search_content_list[content['_id']] = content['content']
 
-# Run queries
-queries = ["machine learning", "research activities", "Deep Learning"]
-results = query(queries)
+        # pass in an array of strings to index
+        index(search_content_list) # UNCOMMENT TO USE INDEXER
+    elif choice == "4":
+        user_query = input("Enter your query: ")
 
-# Display results
-for query, docs in results.items():
-    print(f"Query: {query}")
-    for doc in docs:
-        print(f"  Content: {doc['content']}\n  Similarity: {doc['cosine_similarity']:.2f}")
+        results = query([user_query])
+
+        # Display results
+        for query, docs in results.items():
+            print(f"Query: {query}")
+            for doc in docs:
+                print(f"  Content: {doc['content']}\n  Similarity: {doc['cosine_similarity']:.2f}")
+    elif choice == "5":
+        print("Exiting...")
+        break
+    else:
+        print("Invalid choice. Please try again.")
