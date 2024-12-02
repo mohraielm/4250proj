@@ -33,7 +33,7 @@ test_data4 = {
 index(test_data3)
 
 # Run queries
-queries = ["machine learning", "AI advancements", "deep learning"]
+queries = ["machine learning", "research activities", "Deep Learning"]
 results = query(queries)
 
 # Display results

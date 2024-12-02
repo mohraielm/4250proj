@@ -26,20 +26,20 @@ def query(queries: list):
 
     for query_index, query_vector in enumerate(query_vectors):
         query_text = queries[query_index]
-        non_zero_indices = query_vector.nonzero()[1]
+        non_zero_indices = query_vector.nonzero()[1].tolist()
 
         # Retrieve matching terms from inverted index
         matching_terms = inverted_index_collection.find({
-            "_id": {"$in": [str(index) for index in non_zero_indices]}
+            "pos": {"$in": non_zero_indices}
         })
 
         term_document_map = {}
         for term_doc in matching_terms:
-            for doc in term_doc['documents']:
+            for doc in term_doc['docs']:
                 doc_id = doc['id']
                 if doc_id not in term_document_map:
                     term_document_map[doc_id] = {'vector': {}, 'content': ""}
-                term_document_map[doc_id]['vector'][term_doc['_id']] = doc['tfidf']
+                term_document_map[doc_id]['vector'][term_doc['pos']] = doc['tfidf']
 
         # Calculate cosine similarity for each document
         documents_with_cos_sim = []
