@@ -3,10 +3,10 @@ from database import *
 
 # find the target documents in the pages collection
 
-targets = pages.find({'isTarget': True})
+targets = pages_collection.find({'isTarget': True})
 
 for target in targets:
-    target_content = target['html']
+    target_content = target['content']
     bs = BeautifulSoup(target_content, 'html.parser')
     
     # fac-staff and accolades are the search areas. need to extract just text
@@ -26,5 +26,8 @@ for target in targets:
     combined += accolade_str
 
     # insert into mongodb
-    search_content.insert_one({'text': combined})
-
+    search_content_collection.update_one(
+        { '_id': target['_id'] },
+        { '$set': { 'content': combined } },
+        upsert = True
+    )

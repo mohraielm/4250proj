@@ -16,7 +16,7 @@ NUMBER_TARGETS = 10
 # define re for easier access to expression
 
 relative_url = r'^(?!https?:\/\/www.)'
-cpp_base =  "https://www.cpp.edu/"
+cpp_base = "https://www.cpp.edu/"
 
 while frontier:
     # get the next URL from the queue
@@ -42,7 +42,14 @@ while frontier:
     # check if target is found (header is found)
     target = bs.find('div', {'class': 'fac-info'})
     if target:
-        pages.insert_one({'url': url, 'html': data.decode('utf-8'), 'isTarget': True})
+        pages_collection.update_one(
+            { '_id': url },
+            { '$set': {
+                'content': data.decode('utf-8'),
+                'isTarget': True
+            }},
+            upsert = True
+        )
         targets_found += 1
 
         # check if number_targets is reached
@@ -50,7 +57,11 @@ while frontier:
             frontier.clear()
             break
     else:
-        pages.insert_one({'url': url, 'html': data.decode('utf-8')})
+        pages_collection.update_one(
+            { '_id': url },
+            { '$set': { 'content': data.decode('utf-8') } },
+            upsert = True
+        )
         linked_urls = []
 
         a_tag = bs.find_all('a', href=True)

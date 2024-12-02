@@ -48,7 +48,8 @@ class StemTokenizer:
             doc: original text of a document of type string
         '''
         positions = []
-        matches = re.finditer(token, doc)
+        pattern = re.escape(token)
+        matches = re.finditer(pattern, doc)
 
         for match in matches:
             positions.append(match.start())

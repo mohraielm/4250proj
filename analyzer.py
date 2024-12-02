@@ -49,7 +49,7 @@ def query(queries: list):
                 for term_id, tfidf in doc_data['vector'].items()
             )
             documents_with_cos_sim.append({
-                "content": documents_collection.find_one({"_id": doc_id})['content'],
+                "content": search_content_collection.find_one({"_id": doc_id})['content'],
                 "cosine_similarity": dot_product
             })
 
