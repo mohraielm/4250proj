@@ -10,5 +10,6 @@ try:
     vocabulary_collection = db['vocabulary']
     documents_collection = db['documents']
     inverted_index_collection = db['invertedIndex']
+    vectorizer_collection = db['vectorizer']
 except:
     print("Database not connected successfully")

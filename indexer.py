@@ -2,6 +2,7 @@ from typing import Dict
 from sklearn.feature_extraction.text import TfidfVectorizer
 import pandas as pd
 from tokenizers import StemTokenizer
+import pickle
 from database import *
 
 def index(documents: Dict[str, str]):
@@ -34,6 +35,13 @@ def index(documents: Dict[str, str]):
         upsert=True
     )
 
+    serialized_vectorizer = pickle.dumps(vectorizer)
+    vectorizer_collection.update_one(
+        { "_id": "vectorizer_doc" },
+        { "$set": { "vectorizer": serialized_vectorizer } },
+        upsert=True
+    )
+
     # encode documents into vectors
     sparse_matrix = vectorizer.transform(texts)
 
@@ -51,16 +59,6 @@ def index(documents: Dict[str, str]):
         # convert sparse_vector into a dictionary so we can directly insert into a mongodb document
         indices = [str(term_index) for term_index in sparse_vector.indices]   # converts np.int32 indices into strings to be used as mongoDB fields
         values = sparse_vector.data
-        sparse_vector_to_dict = dict(zip(indices, values))
-
-        # store sparse vector and doc id in mongodb index collection
-        documents_collection.update_one(
-            { "_id": url },
-            { "$set": { "sparseVector": sparse_vector_to_dict } },
-            upsert=True  # Create if doesn't exist
-        )
-
-
     # retrieve the terms after tokenization, stopword removal, and stemming
     terms = vectorizer.get_feature_names_out()
 
@@ -68,27 +66,27 @@ def index(documents: Dict[str, str]):
     print("TD-IDF Vectorizer Training\n")
     print(pd.DataFrame(data = sparse_matrix.toarray(), columns = terms))
 
+    # Adding pos field for inverted index
+    vocabulary = vectorizer.vocabulary_
     inverted_index = {}
+    for term, pos in vocabulary.items():
+        inverted_index[term] = {"_id": pos, "pos": pos, "docs": []}
 
     # Iterate through every token
     for doc_index, (url, _) in enumerate(documents.items()):
         sparse_vector = sparse_matrix[doc_index]
-        
+
         # Iterate through each nonzero entry in the sparse vector
-        for term_index, term in enumerate(terms):
+        for term, pos in vocabulary.items():
             # If this term appears in the current document
-            if term_index in sparse_vector.indices:
-                tfidf = sparse_vector.data[sparse_vector.indices == term_index][0]
+            if pos in sparse_vector.indices:
+                tfidf = sparse_vector[0, pos]
 
                 # Add the term to the inverted index
-                if term not in inverted_index:
-                    inverted_index[term] = []
-
-                inverted_index[term].append({
+                inverted_index[term]["docs"].append({
                     "id": url,
                     "positions": [pos for pos in tokenizer.term_positions[doc_index][term]],  # Get term positions
-                    "tfidf": tfidf
-                })
+                    "tfidf": tfidf})
 
     # Print inverted index using a dataframe for console print formatting
     inverted_index_df = pd.DataFrame([
