@@ -1,5 +1,6 @@
 from database import *
 from indexer import index
+from analyzer import query 
 
 ## TEST DATA
 test_data = [
@@ -30,3 +31,16 @@ test_data4 = {
 
 # pass in an array of strings to index
 index(test_data3)
+
+# Run queries
+queries = ["machine learning", "AI advancements", "deep learning"]
+results = query(queries)
+
+# Display results
+for query, docs in results.items():
+    print(f"Query: {query}")
+    for doc in docs:
+        print(f"  Content: {doc['content']}\n  Similarity: {doc['cosine_similarity']:.2f}")
+
+
+
