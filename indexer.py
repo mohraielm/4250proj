@@ -65,7 +65,7 @@ def index(documents: Dict[str, str]):
 
     # Print term matrix using a dataframe for console print formatting
     print("TD-IDF Vectorizer Training\n")
-    print(pd.DataFrame(data=sparse_matrix.toarray(), columns=terms))
+    print(pd.DataFrame(data = sparse_matrix.toarray(), columns = terms))
 
     # Adding pos field for inverted index
     vocabulary = vectorizer.vocabulary_
