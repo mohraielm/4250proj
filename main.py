@@ -1,25 +1,42 @@
 from database import *
 from indexer import index
-from analyzer import query 
+from analyzer import query
 
-# crawl
-#from crawler import *     # UNCOMMENT TO USE CRAWLER
-# parse
-#from parser_1 import *
-# get search content to index
-search_content = search_content_collection.find()
-search_content_list = {}
+while True:
+    print("\nMenu:")
+    print("1. Crawl")
+    print("2. Parse")
+    print("3. Index")
+    print("4. Query")
+    print("5. Exit")
 
-for content in search_content:
-    search_content_list[content['_id']] = content['content']
+    choice = input("Enter your choice: ")
 
-# pass in an array of strings to index
-#index(search_content_list) # UNCOMMENT TO USE INDEXER
+    if choice == "1":
+        print("Option 1 selected")
+    elif choice == "2":
+        print("Option 2 selected")
+    elif choice == "3":
+        # get search content to index
+        search_content = search_content_collection.find()
+        search_content_list = {}
 
-# Run queries
-queries = [ " bridge"]
-results = query(queries)
+        for content in search_content:
+            search_content_list[content['_id']] = content['content']
 
-# Display results
-for query, docs in results.items():
-    print(f"Query: {query}")
+        # pass in an array of strings to index
+        index(search_content_list) # UNCOMMENT TO USE INDEXER
+    elif choice == "4":
+        user_query = input("Enter your query: ")
+
+        results = query([user_query])
+
+        # Display results
+        for query, docs in results.items():
+            print(f"Query: {query}")
+
+    elif choice == "5":
+        print("Exiting...")
+        break
+    else:
+        print("Invalid choice. Please try again.")
