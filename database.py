@@ -9,6 +9,8 @@ try:
     db = client[DB_NAME]
     documents_collection = db['documents']
     inverted_index_collection = db['invertedIndex']
+    pages = db['pages']
+    search_content = db['search_content']
     vectorizer_collection = db['vectorizer']
 except:
     print("Database not connected successfully")
